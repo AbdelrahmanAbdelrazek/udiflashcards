@@ -14,7 +14,7 @@ import { setLocalNotification } from './src/utils/helpers'
 const store = createStore(reducer, middleware);
 
 export default class App extends Component {
-  componentDidMount(){
+  componentDidMount() {
     setLocalNotification();
   }
   render() {
