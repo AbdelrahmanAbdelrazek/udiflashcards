@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import {  View } from 'react-native';
-import { Input, Button, Icon } from 'react-native-elements'
 import { connect } from 'react-redux';
 import NotFound from './NotFound'
 import { addCardToDeck } from '../actions';
 import { addCardToDeck as APIaddCardToDeck } from '../utils/api';
+import { Button, Card, TextInput } from 'react-native-paper';
 
 class NewCard extends Component {
     static navigationOptions = {
@@ -31,23 +30,16 @@ class NewCard extends Component {
         const deck = this.props.decks[deck_key];
         return (
             deck ?
-                <View>
-                    <Input
-                        placeholder="Question"
-                        // leftIcon={{ type: 'font-awesome', name: 'question' }}
-                        onChangeText={value => this.setState(state => ({ ...state, question: value }))}
-                    />
-                    <Input
-                        placeholder="Answer"
-                        // leftIcon={{ type: 'font-awesome', name: 'answer' }}
-                        onChangeText={value => this.setState(state => ({ ...state, answer: value }))}
-                    />
-                    <Button buttonStyle={{ marginBottom: 300 }}
-                        title="Submit"
-                        type="solid"
-                        onPress={this.onSubmit.bind(this)}
-                    />
-                </View>
+                <Card >
+                    <Card.Content >
+                        <TextInput mode="outlined" label="Question" onChangeText={value => this.setState(state => ({ ...state, question: value }))} />
+                        <TextInput mode="outlined" label="Answer" onChangeText={value => this.setState(state => ({ ...state, answer: value }))} />
+
+                    </Card.Content>
+                    <Card.Actions>
+                        <Button mode="contained" onPress={this.onSubmit.bind(this)}>Submit</Button>
+                    </Card.Actions>
+                </Card>
                 :
                 <NotFound />
         );

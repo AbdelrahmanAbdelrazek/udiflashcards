@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import NotFound from './NotFound'
-import {clearLocalNotification, setLocalNotification} from '../utils/helpers'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
+import { Text } from 'react-native-paper';
+import { Button, Card, Divider } from 'react-native-paper';
 
 class QuizResults extends Component {
     componentDidMount() {
@@ -14,22 +15,13 @@ class QuizResults extends Component {
         const { back, restartQuiz, total_questions, correctAnswers } = this.props;
         return (
             <View>
-                <Card.Title style={{ fontSize: 72 }}>Results</Card.Title>
                 <Text
                     style={{ fontSize: 48, textAlign: "center", fontWeight: "bold", marginBottom: 200 }}
                 >
                     You answered {Math.round((correctAnswers / total_questions) * 100)}% correct.
                 </Text>
-                <Button buttonStyle={{ marginBottom: 10 }}
-                    title="Restart Quiz"
-                    type="solid"
-                    onPress={() => restartQuiz()}
-                />
-                <Button buttonStyle={{ marginBottom: 300 }}
-                    title="Back to my Decks"
-                    type="solid"
-                    onPress={() => back()}
-                />
+                <Button mode="contained" style={{ marginBottom: 10 }} onPress={() => restartQuiz()}>Restart Quiz</Button>
+                <Button mode="contained" onPress={() => back()}>Back to my Decks</Button>
             </View>
         );
     }
@@ -83,38 +75,32 @@ class Quiz extends Component {
             deck ?
                 questions.length ?
                     <Card>
-                        {currentQuestion <= questions.length ?
-                            <View>
-                                <Card.Title>{title} ({currentQuestion}/{questions.length})</Card.Title>
-                                <Card.Divider />
-                                {viewAnswer ?
-                                    <Text style={{ fontSize: 30, textAlign: "center", marginBottom: 20 }}>
-                                        {questions[currentQuestion - 1].answer}
-                                    </Text> :
-                                    <Text style={{ fontSize: 30, textAlign: "center", marginBottom: 20 }}>
-                                        {questions[currentQuestion - 1].question}
+                        <Card.Content >
+                            {currentQuestion <= questions.length ?
+                                <View>
+                                    <Card.Title titleStyle={{ fontSize: 40, textAlign: "center", paddingTop: 20 }} subtitleStyle={{ fontSize: 40, textAlign: "center", paddingTop: 20 }} title={title} subtitle={`${currentQuestion}/${questions.length}`} />
+                                    <Divider />
+                                    {viewAnswer ?
+
+                                        <Text style={{ fontSize: 30, textAlign: "center" }}>
+                                            {questions[currentQuestion - 1].answer}
+                                        </Text> :
+                                        <Text style={{ fontSize: 30, textAlign: "center" }}>
+                                            {questions[currentQuestion - 1].question}
+                                        </Text>
+                                    }
+                                    <Text
+                                        style={{ textAlign: "center", fontWeight: "bold", color: "#d4271b", marginBottom: 100 }}
+                                        onPress={this.toggleViewAnswer.bind(this)}
+                                    >
+                                        {viewAnswer ? "View Question" : "View Answer"}
                                     </Text>
-                                }
-                                <Text
-                                    style={{ textAlign: "center", fontWeight: "bold", color: "#d4271b", marginBottom: 200 }}
-                                    onPress={this.toggleViewAnswer.bind(this)}
-                                >
-                                    {viewAnswer ? "View Question" : "View Answer"}
-                                </Text>
-                                <Button
-                                    buttonStyle={{ marginBottom: 20, backgroundColor: "green" }}
-                                    title="Correct"
-                                    type="solid"
-                                    onPress={this.correctAnswer.bind(this)}
-                                />
-                                <Button buttonStyle={{ marginBottom: 300, backgroundColor: "#d4271b" }}
-                                    title="Incorrect"
-                                    type="solid"
-                                    onPress={this.wrongAnswer.bind(this)}
-                                />
-                            </View> :
-                            <QuizResults back={()=>navigation.navigate('Decks')} total_questions={questions.length} correctAnswers={correctAnswers} restartQuiz={this.restartQuiz.bind(this)}/>
-                        }
+                                    <Button mode="contained" style={{ marginBottom: 20, backgroundColor: "green" }} onPress={this.correctAnswer.bind(this)}>Correct</Button>
+                                    <Button mode="contained" style={{ marginBottom: 20, backgroundColor: "#d4271b" }} onPress={this.wrongAnswer.bind(this)}>Incorrect</Button>
+                                </View> :
+                                <QuizResults back={() => navigation.navigate('Decks')} total_questions={questions.length} correctAnswers={correctAnswers} restartQuiz={this.restartQuiz.bind(this)} />
+                            }
+                        </Card.Content>
                     </Card> :
                     <Text
                         style={{ fontSize: 48, textAlign: "center", fontWeight: "bold", marginBottom: 200 }}
